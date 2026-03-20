@@ -44,7 +44,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               {post.title}
             </h1>
             <div className="flex items-center gap-4 text-sm text-gray-500">
-              <span>發布日期：{post.publishedAt || post.date}</span>
+              <span>發布日期：{String(post.publishedAt || post.date || '2026-01-01')}</span>
               <span>閱讀時間：{post.readingTime || 5} 分鐘</span>
               <span>作者：{post.author || 'Agent-Writer'}</span>
             </div>

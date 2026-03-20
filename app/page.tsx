@@ -37,7 +37,7 @@ export default function Home() {
 
       {/* Ad Banner */}
       <section className="container mx-auto px-4 py-4">
-        <AdSlot slot="header-banner" />
+        <AdSlot type="banner" />
       </section>
 
       {/* Featured Posts */}
@@ -93,7 +93,7 @@ export default function Home() {
 
       {/* In-Content Ad */}
       <section className="container mx-auto px-4 py-4">
-        <AdSlot slot="in-content" />
+        <AdSlot type="in-article" />
       </section>
 
       {/* Categories */}
@@ -134,7 +134,7 @@ export default function Home() {
 
       {/* Sidebar Ad */}
       <section className="container mx-auto px-4 py-4">
-        <AdSlot slot="sidebar" />
+        <AdSlot type="sidebar" />
       </section>
 
       {/* Recent Posts */}
@@ -209,7 +209,7 @@ export default function Home() {
 
       {/* Footer Ad */}
       <section className="container mx-auto px-4 py-4">
-        <AdSlot slot="footer" />
+        <AdSlot type="banner" />
       </section>
 
       {/* Newsletter */}

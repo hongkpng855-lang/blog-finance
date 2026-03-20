@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import AdSlot from './AdSlot'
+import AdSlot from '../../components/AdSlot'
 
 export default function Sidebar() {
   const [isClient, setIsClient] = useState(false)
@@ -49,7 +49,7 @@ export default function Sidebar() {
       </div>
 
       <div className="sticky top-4">
-        <AdSlot slot="sidebar" />
+        <AdSlot type="sidebar" />
       </div>
     </aside>
   )

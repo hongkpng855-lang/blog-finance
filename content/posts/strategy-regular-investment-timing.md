@@ -1,3 +1,9 @@
+---
+title: strategy-regular-investment-timing
+date: 2026-03-19
+category: 財經分析
+tags: [財經, 投資, 分析]
+---
 ## 相關文章推薦
 - [0050 ETF 十年報酬率分析](/posts/0050-ten-year-returns)
 - [006208 vs 0050 費用率詳細比較](/posts/006208-vs-0050-expense-ratio-comparison)

@@ -1,13 +1,5 @@
-# https://www.robotstxt.org/robotstxt.html
-User-agent: *
+User-Agent: *
 Allow: /
-
-# Sitemap
-Sitemap: https://blog-finance.vercel.app/sitemap.xml
-
-# Crawl-delay
-Crawl-delay: 1
-
-# Disallow admin paths
 Disallow: /api/
-Disallow: /_next/
+
+Sitemap: https://finance-blog.vercel.app/sitemap.xml
