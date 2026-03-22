@@ -50,37 +50,49 @@ export async function getPostData(slug: string) {
   // Convert Markdown to HTML
   let contentHtml = content
   
-  // Simple Markdown to HTML conversion
-  // Headers
-  contentHtml = contentHtml.replace(/^### (.*$)/gim, '<h3>$1</h3>')
-  contentHtml = contentHtml.replace(/^## (.*$)/gim, '<h2>$1</h2>')
-  contentHtml = contentHtml.replace(/^# (.*$)/gim, '<h1>$1</h1>')
-  
-  // Bold and Italic
-  contentHtml = contentHtml.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
-  contentHtml = contentHtml.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-  contentHtml = contentHtml.replace(/\*(.*?)\*/g, '<em>$1</em>')
-  
-  // Links
-  contentHtml = contentHtml.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
-  
-  // Lists
-  contentHtml = contentHtml.replace(/^\- (.*$)/gim, '<li>$1</li>')
-  contentHtml = contentHtml.replace(/^\* (.*$)/gim, '<li>$1</li>')
-  contentHtml = contentHtml.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
-  
-  // Paragraphs
-  contentHtml = contentHtml.replace(/\n\n/g, '</p><p>')
-  contentHtml = '<p>' + contentHtml + '</p>'
-  
-  // Clean up empty paragraphs
-  contentHtml = contentHtml.replace(/<p><\/p>/g, '')
-  contentHtml = contentHtml.replace(/<p>(<h[1-6]>)/g, '$1')
-  contentHtml = contentHtml.replace(/(<\/h[1-6]>)<\/p>/g, '$1')
-  contentHtml = contentHtml.replace(/<p>(<ul>)/g, '$1')
-  contentHtml = contentHtml.replace(/(<\/ul>)<\/p>/g, '$1')
-  contentHtml = contentHtml.replace(/<p>(<li>)/g, '$1')
-  contentHtml = contentHtml.replace(/(<\/li>)<\/p>/g, '$1')
+  // Split by double newlines to create paragraphs
+  const paragraphs = contentHtml.split(/\n\n+/)
+  contentHtml = paragraphs.map(p => {
+    p = p.trim()
+    if (!p) return ''
+    
+    // Headers
+    if (p.startsWith('### ')) {
+      return `<h3>${p.substring(4)}</h3>`
+    }
+    if (p.startsWith('## ')) {
+      return `<h2>${p.substring(3)}</h2>`
+    }
+    if (p.startsWith('# ')) {
+      return `<h1>${p.substring(2)}</h1>`
+    }
+    
+    // Lists
+    if (p.startsWith('- ') || p.startsWith('* ')) {
+      const items = p.split(/\n/).map(item => {
+        item = item.trim()
+        if (item.startsWith('- ') || item.startsWith('* ')) {
+          return `<li>${item.substring(2)}</li>`
+        }
+        return item
+      }).join('')
+      return `<ul>${items}</ul>`
+    }
+    
+    // Regular paragraph - handle inline formatting
+    // Bold and Italic
+    p = p.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
+    p = p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    p = p.replace(/\*(.*?)\*/g, '<em>$1</em>')
+    
+    // Links
+    p = p.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+    
+    // Handle single line breaks within paragraph
+    p = p.replace(/\n/g, '<br/>')
+    
+    return `<p>${p}</p>`
+  }).join('\n')
 
   return {
     slug,
