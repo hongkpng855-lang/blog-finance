@@ -2,55 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
+/* prose styles - freedidi.com 參考 */
+.prose {
+  @apply text-gray-700 leading-relaxed text-base sm:text-lg;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif;
+.prose h1 {
+  @apply text-2xl sm:text-3xl font-bold mb-4 mt-8 text-gray-900;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.prose h2 {
+  @apply text-xl sm:text-2xl font-bold mb-3 mt-6 text-gray-900;
 }
 
-/* 廣告樣式 */
-.ad-slot {
-  background: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #94a3b8;
-  font-size: 14px;
+.prose h3 {
+  @apply text-lg sm:text-xl font-bold mb-2 mt-5 text-gray-900;
 }
 
-/* 文章卡片 */
-.article-card {
-  transition: transform 0.2s, box-shadow 0.2s;
+.prose p {
+  @apply mb-4 text-gray-700 leading-7;
 }
 
-.article-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+.prose ul {
+  @apply list-disc list-inside mb-4 ml-4;
 }
 
-/* 標籤樣式 */
-.tag {
-  background: #e0f2fe;
-  color: #0369a1;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+.prose ol {
+  @apply list-decimal list-inside mb-4 ml-4;
+}
+
+.prose li {
+  @apply mb-2 text-gray-700;
+}
+
+.prose a {
+  @apply text-blue-600 hover:text-blue-800 underline;
+}
+
+.prose strong {
+  @apply font-bold text-gray-900;
+}
+
+.prose em {
+  @apply italic;
+}
+
+.prose br {
+  @apply block mb-2;
 }
