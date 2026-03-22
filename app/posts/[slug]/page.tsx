@@ -23,6 +23,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
 
+  // Convert markdown to HTML if contentHtml is empty
+  const contentHtml = post.contentHtml || post.content || ''
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -73,23 +76,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </span>
         </div>
 
-        {/* Content */}
+        {/* Content - Render HTML */}
         <div 
-          className="prose prose-lg max-w-none
-            prose-headings:text-gray-900 prose-headings:font-bold
-            prose-h1:text-2xl prose-h1:mt-8 prose-h1:mb-4
-            prose-h2:text-xl prose-h2:mt-6 prose-h2:mb-3
-            prose-h3:text-lg prose-h3:mt-4 prose-h3:mb-2
-            prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
-            prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-            prose-img:rounded-lg prose-img:max-w-full
-            prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4
-            prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-4
-            prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600
-            prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-            prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
-          "
-          dangerouslySetInnerHTML={{ __html: post.contentHtml || post.content || '' }}
+          className="prose max-w-none"
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
         />
 
         {/* Tags */}
