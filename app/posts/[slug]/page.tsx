@@ -63,17 +63,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {/* 文章內容 */}
           <div className="p-6 sm:p-8">
             <div 
-              className="prose prose-lg max-w-none
-                prose-headings:text-gray-900 prose-headings:font-bold
-                prose-h1:text-2xl prose-h1:mb-4 prose-h1:mt-6
-                prose-h2:text-xl prose-h2:mb-3 prose-h2:mt-5
-                prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
-                prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
-                prose-img:rounded-lg prose-img:max-w-full
-                prose-ul:list-disc prose-ul:pl-6
-                prose-ol:list-decimal prose-ol:pl-6
-              "
-              dangerouslySetInnerHTML={{ __html: (post.content || '').replace(/\n/g, '<br/>') }}
+              className="prose max-w-none"
+              dangerouslySetInnerHTML={{ __html: post.contentHtml || post.content || '' }}
             />
 
             {/* 文章內廣告 */}
