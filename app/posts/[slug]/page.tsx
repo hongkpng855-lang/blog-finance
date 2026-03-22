@@ -1,6 +1,5 @@
 import { getPostData, getAllPostSlugs, getSortedPostsData } from '@/lib/posts'
 import Link from 'next/link'
-import AdSlot from '@/components/AdSlot'
 
 export async function generateStaticParams() {
   const slugs = getAllPostSlugs()
@@ -9,7 +8,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = getPostData(slug)
+  const post = await getPostData(slug)
   return {
     title: `${post.title} | 財經投資部落格`,
     description: post.seoDescription || post.excerpt || '',
@@ -18,111 +17,136 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const post = getPostData(slug)
+  const post = await getPostData(slug)
   const allPosts = getSortedPostsData()
   const currentIndex = allPosts.findIndex(p => p.slug === slug)
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link href="/" className="text-2xl font-bold text-gray-900 hover:text-blue-600">
-            財經投資部落格
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div className="max-w-4xl mx-auto px-4 py-3">
+          <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span className="font-medium">返回首頁</span>
           </Link>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 文章 */}
-        <article className="bg-white rounded-lg shadow-md overflow-hidden">
-          {/* 文章標題區 */}
-          <header className="p-6 sm:p-8 border-b">
-            {post.category && (
-              <span className="inline-block bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full mb-4">
-                {post.category}
-              </span>
-            )}
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
-              {post.title}
-            </h1>
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
-              <span>📅 {String(post.publishedAt || post.date || '2026-01-01')}</span>
-              <span>⏱️ {post.readingTime || 5} 分鐘閱讀</span>
-              <span>✍️ {post.author || '財經編輯'}</span>
+      {/* Article */}
+      <article className="max-w-4xl mx-auto px-4 py-8">
+        {/* Category */}
+        {post.category && (
+          <span className="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-3 py-1 rounded-full mb-4">
+            {post.category}
+          </span>
+        )}
+
+        {/* Title */}
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+          {post.title}
+        </h1>
+
+        {/* Meta */}
+        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-8 pb-6 border-b border-gray-200">
+          <span className="flex items-center gap-1">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            {post.date || '2026-01-01'}
+          </span>
+          <span className="flex items-center gap-1">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {post.readingTime || 5} 分鐘閱讀
+          </span>
+          <span className="flex items-center gap-1">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+            {post.author || '財經編輯'}
+          </span>
+        </div>
+
+        {/* Content */}
+        <div 
+          className="prose prose-lg max-w-none
+            prose-headings:text-gray-900 prose-headings:font-bold
+            prose-h1:text-2xl prose-h1:mt-8 prose-h1:mb-4
+            prose-h2:text-xl prose-h2:mt-6 prose-h2:mb-3
+            prose-h3:text-lg prose-h3:mt-4 prose-h3:mb-2
+            prose-p:text-gray-700 prose-p:leading-relaxed prose-p:mb-4
+            prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline
+            prose-img:rounded-lg prose-img:max-w-full
+            prose-ul:list-disc prose-ul:pl-6 prose-ul:mb-4
+            prose-ol:list-decimal prose-ol:pl-6 prose-ol:mb-4
+            prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600
+            prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+            prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
+          "
+          dangerouslySetInnerHTML={{ __html: post.contentHtml || post.content || '' }}
+        />
+
+        {/* Tags */}
+        {post.tags && post.tags.length > 0 && (
+          <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag: string) => (
+                <Link 
+                  key={tag} 
+                  href={`/tags/${tag}`}
+                  className="inline-flex items-center bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-200 transition-colors"
+                >
+                  #{tag}
+                </Link>
+              ))}
             </div>
-          </header>
-
-          {/* 頂部廣告 */}
-          <div className="px-6 sm:px-8 py-4 bg-gray-50">
-            <AdSlot type="banner" className="h-24 w-full bg-gray-200 flex items-center justify-center text-gray-500" />
           </div>
+        )}
+      </article>
 
-          {/* 文章內容 */}
-          <div className="p-6 sm:p-8">
-            <div 
-              className="prose max-w-none"
-              dangerouslySetInnerHTML={{ __html: post.contentHtml || post.content || '' }}
-            />
-
-            {/* 文章內廣告 */}
-            <div className="my-8">
-              <AdSlot type="in-article" className="h-32 w-full bg-gray-200 flex items-center justify-center text-gray-500" />
-            </div>
-
-            {/* 標籤 */}
-            {post.tags && post.tags.length > 0 && (
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <h3 className="text-sm font-medium text-gray-700 mb-3">標籤</h3>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.map((tag: string) => (
-                    <Link 
-                      key={tag} 
-                      href={`/tags/${tag}`}
-                      className="inline-block bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-200 transition-colors"
-                    >
-                      #{tag}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </article>
-
-        {/* 上下篇導航 */}
-        <nav className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Navigation */}
+      <nav className="max-w-4xl mx-auto px-4 py-8 border-t border-gray-200">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {prevPost && (
             <Link 
               href={`/posts/${prevPost.slug}`} 
-              className="bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border"
+              className="bg-gray-50 border border-gray-200 rounded-lg p-4 hover:bg-gray-100 transition-colors"
             >
-              <span className="text-sm text-gray-500">← 上一篇</span>
-              <p className="font-medium mt-1 text-gray-900 line-clamp-2">{prevPost.title}</p>
+              <span className="text-sm text-gray-500 flex items-center gap-1">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                上一篇
+              </span>
+              <p className="font-medium text-gray-900 mt-1 line-clamp-2">{prevPost.title}</p>
             </Link>
           )}
           {nextPost && (
             <Link 
               href={`/posts/${nextPost.slug}`} 
-              className="bg-white rounded-lg p-4 shadow hover:shadow-md transition-shadow border text-left sm:text-right"
+              className="bg-gray-50 border border-gray-200 rounded-lg p-4 hover:bg-gray-100 transition-colors text-right"
             >
-              <span className="text-sm text-gray-500">下一篇 →</span>
-              <p className="font-medium mt-1 text-gray-900 line-clamp-2">{nextPost.title}</p>
+              <span className="text-sm text-gray-500 flex items-center justify-end gap-1">
+                下一篇
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+              <p className="font-medium text-gray-900 mt-1 line-clamp-2">{nextPost.title}</p>
             </Link>
           )}
-        </nav>
-
-        {/* 底部廣告 */}
-        <div className="mt-8">
-          <AdSlot type="banner" className="h-24 w-full bg-gray-200 flex items-center justify-center text-gray-500" />
         </div>
-      </main>
+      </nav>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="bg-gray-900 text-white mt-8">
+        <div className="max-w-6xl mx-auto px-4 py-8">
           <p className="text-center text-gray-400 text-sm">
             © 2026 財經投資部落格. All rights reserved.
           </p>
