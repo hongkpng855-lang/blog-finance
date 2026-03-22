@@ -23,9 +23,6 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
 
-  // Convert markdown to HTML if contentHtml is empty
-  const contentHtml = post.contentHtml || post.content || ''
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -76,10 +73,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </span>
         </div>
 
-        {/* Content - Render HTML */}
+        {/* Content */}
         <div 
           className="prose max-w-none"
-          dangerouslySetInnerHTML={{ __html: contentHtml }}
+          dangerouslySetInnerHTML={{ __html: post.contentHtml }}
         />
 
         {/* Tags */}
