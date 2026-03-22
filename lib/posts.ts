@@ -67,15 +67,15 @@ export async function getPostData(slug: string) {
       return `<h1>${p.substring(2)}</h1>`
     }
     
-    // Lists
-    if (p.startsWith('- ') || p.startsWith('* ')) {
+    // Lists (multi-line)
+    if (/^[-*] /.test(p)) {
       const items = p.split(/\n/).map(item => {
         item = item.trim()
-        if (item.startsWith('- ') || item.startsWith('* ')) {
+        if (/^[-*] /.test(item)) {
           return `<li>${item.substring(2)}</li>`
         }
-        return item
-      }).join('')
+        return ''
+      }).filter(Boolean).join('')
       return `<ul>${items}</ul>`
     }
     
