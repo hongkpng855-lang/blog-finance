@@ -47,51 +47,49 @@ export async function getPostData(slug: string) {
   const fileContents = fs.readFileSync(fullPath, 'utf8')
   const { data, content } = matter(fileContents)
 
-  // Convert Markdown to HTML
+  // Convert Markdown to HTML - improved version
   let contentHtml = content
   
-  // Split by double newlines to create paragraphs
-  const paragraphs = contentHtml.split(/\n\n+/)
-  contentHtml = paragraphs.map(p => {
-    p = p.trim()
-    if (!p) return ''
+  // Escape HTML entities first
+  contentHtml = contentHtml
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+  
+  // Headers (must be at start of line)
+  contentHtml = contentHtml.replace(/^### (.+)$/gm, '<h3>$1</h3>')
+  contentHtml = contentHtml.replace(/^## (.+)$/gm, '<h2>$1</h2>')
+  contentHtml = contentHtml.replace(/^# (.+)$/gm, '<h1>$1</h1>')
+  
+  // Bold and Italic
+  contentHtml = contentHtml.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>')
+  contentHtml = contentHtml.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+  contentHtml = contentHtml.replace(/\*(.+?)\*/g, '<em>$1</em>')
+  
+  // Links
+  contentHtml = contentHtml.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
+  
+  // Unordered lists
+  contentHtml = contentHtml.replace(/^- (.+)$/gm, '<li>$1</li>')
+  contentHtml = contentHtml.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+  
+  // Ordered lists
+  contentHtml = contentHtml.replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+  
+  // Paragraphs - split by double newlines
+  const blocks = contentHtml.split(/\n\n+/)
+  contentHtml = blocks.map(block => {
+    block = block.trim()
+    if (!block) return ''
     
-    // Headers
-    if (p.startsWith('### ')) {
-      return `<h3>${p.substring(4)}</h3>`
+    // Skip if already wrapped in a block element
+    if (/^<(h[1-6]|ul|ol|li|p)/.test(block)) {
+      return block
     }
-    if (p.startsWith('## ')) {
-      return `<h2>${p.substring(3)}</h2>`
-    }
-    if (p.startsWith('# ')) {
-      return `<h1>${p.substring(2)}</h1>`
-    }
     
-    // Lists (multi-line)
-    if (/^[-*] /.test(p)) {
-      const items = p.split(/\n/).map(item => {
-        item = item.trim()
-        if (/^[-*] /.test(item)) {
-          return `<li>${item.substring(2)}</li>`
-        }
-        return ''
-      }).filter(Boolean).join('')
-      return `<ul>${items}</ul>`
-    }
-    
-    // Regular paragraph - handle inline formatting
-    // Bold and Italic
-    p = p.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>')
-    p = p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    p = p.replace(/\*(.*?)\*/g, '<em>$1</em>')
-    
-    // Links
-    p = p.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>')
-    
-    // Handle single line breaks within paragraph
-    p = p.replace(/\n/g, '<br/>')
-    
-    return `<p>${p}</p>`
+    // Wrap in <p> and handle single line breaks
+    block = block.replace(/\n/g, '<br/>')
+    return `<p>${block}</p>`
   }).join('\n')
 
   return {
