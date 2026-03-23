@@ -2,52 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
-/* prose styles - freedidi.com 參考 */
+/* 文章內容樣式 - 參考 freedidi.com */
 .prose {
-  @apply text-gray-700 leading-relaxed text-base sm:text-lg;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  color: #333;
 }
 
 .prose h1 {
-  @apply text-2xl sm:text-3xl font-bold mb-4 mt-8 text-gray-900;
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  line-height: 1.3;
+  color: #111;
 }
 
 .prose h2 {
-  @apply text-xl sm:text-2xl font-bold mb-3 mt-6 text-gray-900;
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 28px;
+  margin-bottom: 14px;
+  line-height: 1.35;
+  color: #111;
 }
 
 .prose h3 {
-  @apply text-lg sm:text-xl font-bold mb-2 mt-5 text-gray-900;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 24px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+  color: #222;
 }
 
 .prose p {
-  @apply mb-4 text-gray-700 leading-7;
+  margin-bottom: 20px;
 }
 
 .prose ul {
-  @apply list-disc list-inside mb-4 ml-4;
+  list-style-type: disc;
+  margin-left: 24px;
+  margin-bottom: 20px;
 }
 
 .prose ol {
-  @apply list-decimal list-inside mb-4 ml-4;
+  list-style-type: decimal;
+  margin-left: 24px;
+  margin-bottom: 20px;
 }
 
 .prose li {
-  @apply mb-2 text-gray-700;
+  margin-bottom: 8px;
 }
 
 .prose a {
-  @apply text-blue-600 hover:text-blue-800 underline;
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: #1d4ed8;
 }
 
 .prose strong {
-  @apply font-bold text-gray-900;
+  font-weight: 600;
+  color: #111;
 }
 
 .prose em {
-  @apply italic;
+  font-style: italic;
 }
 
 .prose br {
-  @apply block mb-2;
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* 響應式設計 */
+@media (max-width: 640px) {
+  .prose {
+    font-size: 16px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  
+  .prose h1 {
+    font-size: 24px;
+  }
+  
+  .prose h2 {
+    font-size: 20px;
+  }
+  
+  .prose h3 {
+    font-size: 18px;
+  }
 }
